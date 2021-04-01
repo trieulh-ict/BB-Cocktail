@@ -335,4 +335,54 @@ class Drinks extends Equatable {
         strCreativeCommonsConfirmed,
         dateModified,
       ];
+
+  Map<String, String> getIngredientMap() {
+    final map = <String, String>{};
+    if (strIngredient1 != null && strMeasure1 != null) {
+      map[strIngredient1] = strMeasure1;
+    }
+    if (strIngredient2 != null && strMeasure2 != null) {
+      map[strIngredient2] = strMeasure2;
+    }
+    if (strIngredient3 != null && strMeasure3 != null) {
+      map[strIngredient3] = strMeasure3;
+    }
+    if (strIngredient4 != null && strMeasure4 != null) {
+      map[strIngredient4] = strMeasure4;
+    }
+    if (strIngredient5 != null && strMeasure5 != null) {
+      map[strIngredient5] = strMeasure5;
+    }
+    if (strIngredient6 != null && strMeasure6 != null) {
+      map[strIngredient6] = strMeasure6;
+    }
+    if (strIngredient7 != null && strMeasure7 != null) {
+      map[strIngredient7] = strMeasure7;
+    }
+    if (strIngredient8 != null && strMeasure8 != null) {
+      map[strIngredient8] = strMeasure8;
+    }
+    if (strIngredient9 != null && strMeasure9 != null) {
+      map[strIngredient9] = strMeasure9;
+    }
+    if (strIngredient10 != null && strMeasure10 != null) {
+      map[strIngredient10] = strMeasure10;
+    }
+    if (strIngredient11 != null && strMeasure11 != null) {
+      map[strIngredient11] = strMeasure11;
+    }
+    if (strIngredient12 != null && strMeasure12 != null) {
+      map[strIngredient12] = strMeasure12;
+    }
+    if (strIngredient13 != null && strMeasure13 != null) {
+      map[strIngredient13] = strMeasure13;
+    }
+    if (strIngredient14 != null && strMeasure14 != null) {
+      map[strIngredient14] = strMeasure14;
+    }
+    if (strIngredient15 != null && strMeasure15 != null) {
+      map[strIngredient15] = strMeasure15;
+    }
+    return map;
+  }
 }

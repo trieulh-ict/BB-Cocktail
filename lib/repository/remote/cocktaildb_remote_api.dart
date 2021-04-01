@@ -3,13 +3,13 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'cocktaildb_api.g.dart';
+part 'cocktaildb_remote_api.g.dart';
 
 @RestApi(baseUrl: 'https://www.thecocktaildb.com/api/json/v1/1/')
 @injectable
-abstract class CocktailDBApi {
+abstract class CocktailDBRemoteApi {
   @factoryMethod
-  factory CocktailDBApi(Dio dio) = _CocktailDBApi;
+  factory CocktailDBRemoteApi(Dio dio) = _CocktailDBRemoteApi;
 
   @GET('random.php')
   Future<CocktailResult> getRandomCockTail();
@@ -20,4 +20,7 @@ abstract class CocktailDBApi {
   @GET('filter.php')
   Future<CocktailResult> getCocktailsByIngredient(
       @Query('i') String ingredient);
+
+  @GET('lookup.php')
+  Future<CocktailResult> getCocktailById(@Query('i') String drinkId);
 }

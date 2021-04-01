@@ -1,3 +1,4 @@
+import 'package:bb_cocktail/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,9 +14,18 @@ Future<void> main() async {
   runApp(BBCApp());
 }
 
-class BBCApp extends StatelessWidget {
+class BBCApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) => const MaterialApp(
+  _BBCAppState createState() => _BBCAppState();
+}
+
+class _BBCAppState extends State<BBCApp> {
+  BBCRoute route = getIt<BBCRoute>();
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
         home: MainPage(),
+        initialRoute: BBCRoute.routeMain,
+        onGenerateRoute: route.onGerenateRoute,
       );
 }

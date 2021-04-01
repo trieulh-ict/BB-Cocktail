@@ -1,5 +1,6 @@
 import 'package:bb_cocktail/di/injection.dart';
 import 'package:bb_cocktail/model/response/models/drinks.dart';
+import 'package:bb_cocktail/routes.dart';
 import 'package:bb_cocktail/utils/animation_slide_fade_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,14 +74,14 @@ class _DiscoveryPageState extends State<DiscoveryPage>
             _animateDisplay(
                 child: Text(
                   'Discover Recipes',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                  style: TextStyle(fontSize: 20, color: Colors.white),
                 ),
                 direction: SlideFadeInDirection.fromRight),
             _animateDisplay(
                 child: Text(
                   drink.strDrink,
                   style: TextStyle(
-                      fontSize: 64,
+                      fontSize: 60,
                       color: Colors.white,
                       fontFamily: 'DMSerifDisplay',
                       height: 1),
@@ -89,16 +90,16 @@ class _DiscoveryPageState extends State<DiscoveryPage>
             _animateDisplay(
                 child: Text(
                   drink.strCategory,
-                  style: TextStyle(fontSize: 12, color: Colors.white),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
                 direction: SlideFadeInDirection.fromRight),
             Spacer(),
-            _buildDiscoverButton(drink.idDrink),
+            _buildDiscoverButton(drink),
           ],
         ),
       ));
 
-  Widget _buildDiscoverButton(String drinkId) => _animateDisplay(
+  Widget _buildDiscoverButton(Drinks drink) => _animateDisplay(
         child: Align(
           alignment: Alignment.bottomRight,
           child: RaisedButton(
@@ -106,7 +107,8 @@ class _DiscoveryPageState extends State<DiscoveryPage>
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
             color: Colors.white,
             onPressed: () {
-              // Open Detail Page with drinkId
+              Navigator.pushNamed(context, BBCRoute.routeDetail,
+                  arguments: drink);
             },
             child: Row(
               mainAxisSize: MainAxisSize.min,

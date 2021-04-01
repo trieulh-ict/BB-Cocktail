@@ -1,11 +1,13 @@
 import 'package:bb_cocktail/di/injection.dart';
 import 'package:bb_cocktail/model/ui_model/search_item.dart';
+import 'package:bb_cocktail/routes.dart';
+import 'package:bb_cocktail/ui/common/cocktail_grid_view.dart';
 import 'package:bb_cocktail/ui/search/search_cubit.dart';
-import 'package:bb_cocktail/ui/search/widgets/search_cocktail_grid_view.dart';
 import 'package:bb_cocktail/ui/search/widgets/search_dropdown_button.dart';
 import 'package:bb_cocktail/ui/search/widgets/search_dropdown_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -42,6 +44,16 @@ class _SearchPageState extends State<SearchPage> {
     _currentDropdownItem = _items.first;
 
     _searchStream.debounceTime(Duration(seconds: 1)).forEach(_searchValue);
+
+    // Subscribe Keyboard change
+    KeyboardVisibilityController().onChange.listen((bool visible) {
+      if (!visible) {
+        final FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      }
+    });
     super.initState();
   }
 
@@ -76,7 +88,10 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
             ),
-            BlocBuilder<SearchCubit, SearchState>(builder: _buildSearchResult)
+            BlocBuilder<SearchCubit, SearchState>(
+              builder: (context, state) =>
+                  _buildSearchResult(context, state, cubit),
+            )
           ],
         ),
       ),
@@ -97,6 +112,7 @@ class _SearchPageState extends State<SearchPage> {
   TextField _buildSearchTextField() => TextField(
       style: TextStyle(color: Color.fromARGB(255, 175, 175, 176)),
       controller: _controller,
+      autofocus: false,
       onChanged: (value) => setState(() {
             _searchStream.add(value);
           }),
@@ -130,14 +146,47 @@ class _SearchPageState extends State<SearchPage> {
                   ? 0
                   : 4)));
 
-  Widget _buildSearchResult(BuildContext context, SearchState state) {
+  Widget _buildSearchResult(
+      BuildContext context, SearchState state, SearchCubit cubit) {
     Widget content;
     if (state is SearchInitial) {
       content = Center(
-        child: CircularProgressIndicator(),
+        child: Text(
+          'Search ${_currentDropdownItem.item.suggestionText}',
+          textAlign: TextAlign.center,
+          style:
+              TextStyle(fontSize: 40, color: Color.fromARGB(255, 38, 38, 41)),
+        ),
       );
     } else if (state is SearchSuccess) {
-      content = CocktailGridView(items: state.drinks);
+      content = CocktailGridView(
+        items: state.drinks,
+        favourites: state.favourites,
+        onTap: (drink) async {
+          final isFavouriteUpdated = await Navigator.pushNamed(
+              context, BBCRoute.routeDetail,
+              arguments: drink);
+          if (isFavouriteUpdated) {
+            cubit.refreshFavourite();
+          }
+        },
+        onFavouriteTriggered: (drink) {
+          cubit.toggleFavourite(drink);
+        },
+      );
+    } else if (state is SearchSuccessEmpty) {
+      content = Center(
+        child: Text(
+          'No Cocktail matched.',
+          textAlign: TextAlign.center,
+          style:
+              TextStyle(fontSize: 40, color: Color.fromARGB(255, 38, 38, 41)),
+        ),
+      );
+    } else {
+      content = Center(
+        child: CircularProgressIndicator(),
+      );
     }
 
     return Expanded(

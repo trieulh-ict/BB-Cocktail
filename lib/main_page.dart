@@ -1,4 +1,5 @@
 import 'package:bb_cocktail/ui/discovery/discovery_page.dart';
+import 'package:bb_cocktail/ui/favourite/favourite_page.dart';
 import 'package:bb_cocktail/ui/search/search_page.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedTab = 0;
+  Map<int, bool> selectedStatus = {0: true, 1: false, 2: false};
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,14 +46,15 @@ class _MainPageState extends State<MainPage> {
         ),
       );
 
-  Widget _buildTabStack() => IndexedStack(
+  Widget _buildTabStack() {
+    selectedStatus[_selectedTab] = true;
+    return IndexedStack(
       index: _selectedTab,
       children: <Widget>[
-        DiscoveryPage(),
-        SearchPage(),
-        Text(
-          'Index 2: School',
-        ),
+        selectedStatus[0] ? DiscoveryPage() : Container(),
+        selectedStatus[1] ? SearchPage() : Container(),
+        selectedStatus[2] ? FavouritePage() : Container()
       ],
     );
+  }
 }
